@@ -1,23 +1,33 @@
-import React from "react";
-import API from "./utils/API";
+import React from 'react';
+import './App.css';
+import axios from "axios";
+import SiteHead from './components/SiteHead';
+import Navbar from './components/Navbar';
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 class App extends React.Component {
+
   state = {
     employees: [],
   };
 
   componentDidMount() {
-    this.getEmployees();
+      axios.get(`https://randomuser.me/api/?results=20&nat=Aus`)
+        .then(res => {
+          this.setState({ employees: res.data.results });
+        });
   }
 
-  getEmployees = async () => {
-    const { data } = await API.getUsers();
-    this.setState({ employees: data.results });
-  };
 
   render() {
-    console.log(this.state);
-    return <h1>Employees go here</h1>;
+    return (
+      <div className="App">
+        <SiteHead />
+        {this.state.employees.length > 0 &&
+        <Navbar employees={this.state.employees}/>
+  }
+      </div>
+    );
   }
 }
 
